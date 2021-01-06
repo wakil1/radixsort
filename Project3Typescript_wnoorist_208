@@ -1,0 +1,340 @@
+Script started on Sun 03 May 2020 04:35:14 PM EDT
+[?1034hbash-4.2$ date
+Sun May  3 16:35:20 EDT 2020
+bash-4.2$ uname -a
+Linux zeus-2 3.10.0-1062.12.1.el7.x86_64 #1 SMP Tue Feb 4 23:02:59 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+bash-4.2$ pwd
+/home/wnoorist/CS262/Project3
+bash-4.2$ cat PRojec[K[K[K[K[Kroject3.c
+#include<stdio.h>
+#include<stdlib.h>
+
+
+
+typedef struct _node
+{
+int data; /*sets the data */
+
+struct _node *next;
+
+}listNode;
+
+
+void insert(listNode **head, listNode *newNode){ /*inserts newNode in head linkedlist */
+    if(*head == NULL){
+        *head=newNode;
+    }
+    else{
+      listNode *temp=*head;
+      
+      while(temp -> next != NULL){
+          temp = temp-> next; 
+      }
+    newNode -> next = temp -> next;
+     temp -> next= newNode;
+    }
+
+
+}
+void printList(listNode *head){ /*prints the array list */
+    
+    listNode *temp=head;
+    if(head == NULL){
+    return;
+    }
+    
+    while(temp != NULL){
+     printf("%i ",temp -> data);
+     temp=temp->next;
+    }
+printf("\n");
+}
+
+void printAll(listNode* heads[10]){ /*calls printList to print the whole BucketArray */
+int i;
+
+for(i=0;i<10;i++){
+    if(heads[i]==NULL){
+        printf("bucket[%i]: \n",i);
+    }   
+    else{
+printf("bucket[%i]: ",i);
+printList(heads[i]);
+
+}
+
+}
+}
+void deleteList(listNode *head){ /*used to free everything */
+    listNode *temp=head;
+    if(head == NULL){ /*if head is NULL do nothing */
+    return;
+}else {
+     while(head != NULL){
+      head=head->next;
+        free(temp);
+       temp=head;
+                         
+     }
+     
+}
+}
+
+listNode *newList(){ /*sets head of linkedList  to null and returns it */
+listNode *head=NULL;
+
+
+return head;
+}
+
+
+int maxDigits(listNode* head){
+int count=0,max=-5;
+listNode *temp=head;
+while(temp != NULL){ /*finds the max number */
+if ((temp -> data) > max){
+max = temp -> data;
+}
+temp=temp -> next;
+}
+
+
+while(max != 0){ /*finds how many digits are in the max digit that was found */
+max /= 10;
+count++;
+}
+
+return count;
+}
+
+void radixSort(int max, listNode **linked){
+int divide,i,k,valueTemp;
+
+listNode *buckets[10],*temp=NULL, *temporary=NULL;
+for(k=0;k<10;k++){
+    buckets[k]=newList();
+}
+for(i=0;i<max;i++){
+ divide=1; 
+
+temp=*linked; 
+
+for(k=0;k != i;k++){ /*used to figure out how much to divide */
+divide *= 10;
+} 
+printf("\n");
+
+while(temp != NULL){
+valueTemp = ((temp -> data)/divide)%10; /*element to insert in buckets array */
+
+temporary=temp; 
+temp = temp -> next; 
+temporary->next=NULL;
+
+
+insert(&buckets[valueTemp],temporary); /* inserts depending on modules of Valuetemp */
+
+}
+
+temp=NULL;
+
+printAll(buckets);
+
+*linked=newList();
+for(k=0;k<10;k++){
+temp=buckets[k];
+
+while(temp != NULL){ /* inserts value that were in buckets to the new linked List */
+temporary=temp;
+temp=temp->next;
+temporary->next=NULL;   
+insert(linked,temporary);
+
+}
+}
+
+for(k=0;k<10;k++){
+    buckets[k]=newList();
+}
+
+}
+deleteList(*linked); /*frees all numbers once done */
+
+
+}
+
+int main(int argc, char *argv[]){
+ listNode *sort=NULL,*newNode=NULL;
+char *buffer;
+int seed=-5,max,numVals=0,lowVal=0,highVal=0,i=0,j=0,ran=-5;
+if(argc == 5){ /*reads values from command line read by buf */
+buffer=argv[1];
+seed=atoi(buffer);
+buffer=argv[2];
+numVals=atoi(buffer);
+buffer=argv[3];
+lowVal=atoi(buffer);
+buffer=argv[4];
+highVal=atoi(buffer);
+}
+
+
+srand(seed); /*sets the seed */
+sort=NULL;
+
+
+for(i=0;i<numVals;i++){
+ newNode=malloc(sizeof(listNode));
+    
+ j=0;     
+while(j == 0){
+   ran=rand() % seed +1;
+	if((highVal > ran) && (ran > lowVal)){ /*must be between these numbers set in command line */ 
+        newNode -> data = ran;
+         j=-1;
+           }
+}    
+newNode -> next=NULL;
+insert(&sort,newNode); /*linked list to be sorted */   
+
+}
+max=maxDigits(sort); /*finds the max digits */
+
+
+radixSort(max,&sort); /*sorts the linked list */
+
+
+
+return 0;
+}
+
+bash-4.2$ kat [K[K[K[Kcat MAkefi[K[K[K[K[Kakefile
+# Wakil Nooristany G01077677
+# CS 262, Lab Section 208
+#Project 3
+# The compiler: gcc for C programs, g++ for c++ programs, etc
+CC = gcc
+
+CFLAGS = -Wall -g -std=c89 -D_XOPEN_SOURCE=600 -pedantic-errors
+TARGET = Project3
+
+LIBS=-lm
+
+all: $(TARGET)
+		$(CC) $(CLFAGS) -o $(TARGET) $(TARGET).c
+
+clean:
+		rm $(TARGET)
+
+bash-4.2$ rm Project3.[K
+bash-4.2$ ls
+Makefile  Project3.c  Project3Typescript_wnoorist_208
+bash-4.2$ make
+gcc -Wall -g -std=c89 -D_XOPEN_SOURCE=600 -pedantic-errors    Project3.c   -o Project3
+gcc  -o Project3 Project3.c
+bash-4.2$ make[2Plsrm Project3cat MakefileProject3.c[C[C[C[C[C[C[C[C[C[Cpwd[Kuname -a[4Pdatevalgrind --track-orgins=yes Project3 100 10 5 100 [C[C[C[C[C[C[C[C[C[C[Cim Project3.c[K[C[C[C[C[C[C[C[C[C[C[Calgrind --track-orgins=yes Project3 100 10 5 100 [C[C[C[C[C[C[C[C[C[C[Cim Project3.c[K[C[C[C[C[C[C[C[C[C[C[Calgrind --leak-check=yes Project3 100 10 5 100 --track-orrgins=yes [A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cim Project3.c[K[C[K[K[1PProject3[1PProject3[1PProject3[1PProject3[C[C[C[C[C[C[C[C 1000 100 1 100[K[K[K9999[K
+
+bucket[0]: 780 400 900 890 80 260 30 180 
+bucket[1]: 791 571 501 841 551 701 541 611 71 801 371 641 
+bucket[2]: 142 692 172 922 842 192 132 862 
+bucket[3]: 953 843 573 683 133 253 983 663 
+bucket[4]: 514 804 284 434 554 734 574 224 904 624 914 
+bucket[5]: 605 995 655 445 415 495 205 105 5 795 345 675 795 
+bucket[6]: 856 986 666 246 696 596 136 516 966 56 606 206 
+bucket[7]: 217 347 717 837 57 617 967 117 447 37 
+bucket[8]: 148 238 518 848 998 148 528 388 
+bucket[9]: 399 269 139 719 319 239 319 949 699 159 
+
+bucket[0]: 400 900 501 701 801 804 904 605 205 105 5 606 206 
+bucket[1]: 611 514 914 415 516 217 717 617 117 518 719 319 319 
+bucket[2]: 922 224 624 528 
+bucket[3]: 30 132 133 434 734 136 837 37 238 139 239 
+bucket[4]: 841 541 641 142 842 843 445 345 246 347 447 148 848 148 949 
+bucket[5]: 551 953 253 554 655 856 56 57 159 
+bucket[6]: 260 862 663 666 966 967 269 
+bucket[7]: 571 71 371 172 573 574 675 
+bucket[8]: 780 80 180 683 983 284 986 388 
+bucket[9]: 890 791 692 192 995 495 795 795 696 596 998 399 699 
+
+bucket[0]: 5 30 37 56 57 71 80 
+bucket[1]: 105 117 132 133 136 139 142 148 148 159 172 180 192 
+bucket[2]: 205 206 217 224 238 239 246 253 260 269 284 
+bucket[3]: 319 319 345 347 371 388 399 
+bucket[4]: 400 415 434 445 447 495 
+bucket[5]: 501 514 516 518 528 541 551 554 571 573 574 596 
+bucket[6]: 605 606 611 617 624 641 655 663 666 675 683 692 696 699 
+bucket[7]: 701 717 719 734 780 791 795 795 
+bucket[8]: 801 804 837 841 842 843 848 856 862 890 
+bucket[9]: 900 904 914 922 949 953 966 967 983 986 995 998 
+bash-4.2$ ro[K[KProject3 10 10 1 10
+
+bucket[0]: 
+bucket[1]: 
+bucket[2]: 2 
+bucket[3]: 
+bucket[4]: 
+bucket[5]: 
+bucket[6]: 6 6 6 
+bucket[7]: 
+bucket[8]: 8 8 8 
+bucket[9]: 9 9 9 
+bash-4.2$ Project3 10 10 1 1000 100 1 999[C[C[C[C[C[C[C[C[C[Cmake[K[2Plsrm Project3cat MakefileProject3.c[C[C[C[C[C[C[C[C[C[Cpwd[Kuname -a[4Pdatevalgrind --track-orgins=yes Project3 100 10 5 100 [C[C[C[C[C[C[C[C[C[C[Cim Project3.c[K[C[C[C[C[C[C[C[C[C[C[Calgrind --track-orgins=yes Project3 [C[C[C[C[C[C[C[C[C[C[C[23Pim Project3.c[C[C[C[C[C[C[C[C[C[C[Calgrind --track-orgins=yes Project3 100 10 5 100 [1P[1@1[1@0[C[C[C[C[C[C[C[C[C[1P [1P [1P 9 9 9 [1@0
+valgrind: Unknown option: --track-orgins=yes
+valgrind: Use --help for more information or consult the user manual.
+bash-4.2$ valgrind --track-orgins=yes Project3 1000 100 1 999 [C[C[C[C[C[C[C[C[C[C[33PProject3 10 10 1 1000 100 1 999[C[C[C[C[C[C[C[C[C[Cmake[K[2Plsrm Project3cat MakefileProject3.c[C[C[C[C[C[C[C[C[C[Cpwd[Kuname -a[4Pdatevalgrind --track-orgins=yes Project3 100 10 5 100 [C[C[C[C[C[C[C[C[C[C[Cim Project3.c[K[C[C[C[C[C[C[C[C[C[C[Calgrind --track-orgins=yes Project3 [C[C[C[C[C[C[C[C[C[C[C[23Pim Project3.c[C[C[C[C[C[C[C[C[C[C[Calgrind --track-orgins=yes Project3 100 10 5 100 [C[C[C[C[C[C[C[C[C[C[Cim Project3.c[K[C[C[C[C[C[C[C[C[C[C[Calgrind --track-orgins=yes Project3 100 10 5 100 
+valgrind: Unknown option: --track-orgins=yes
+valgrind: Use --help for more information or consult the user manual.
+bash-4.2$ valgrind [K[K[K[K[K[K[K[K[Kls
+Makefile  Project3  Project3.c	Project3Typescript_wnoorist_208
+bash-4.2$ valgrind --leak-check=yes PR[Kroject3 100 10 [K0 1 1[K999[1@0
+==7584== Memcheck, a memory error detector
+==7584== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==7584== Using Valgrind-3.14.0 and LibVEX; rerun with -h for copyright info
+==7584== Command: Project3 1000 100 1 999
+==7584== 
+
+bucket[0]: 780 400 900 890 80 260 30 180 
+bucket[1]: 791 571 501 841 551 701 541 611 71 801 371 641 
+bucket[2]: 142 692 172 922 842 192 132 862 
+bucket[3]: 953 843 573 683 133 253 983 663 
+bucket[4]: 514 804 284 434 554 734 574 224 904 624 914 
+bucket[5]: 605 995 655 445 415 495 205 105 5 795 345 675 795 
+bucket[6]: 856 986 666 246 696 596 136 516 966 56 606 206 
+bucket[7]: 217 347 717 837 57 617 967 117 447 37 
+bucket[8]: 148 238 518 848 998 148 528 388 
+bucket[9]: 399 269 139 719 319 239 319 949 699 159 
+
+bucket[0]: 400 900 501 701 801 804 904 605 205 105 5 606 206 
+bucket[1]: 611 514 914 415 516 217 717 617 117 518 719 319 319 
+bucket[2]: 922 224 624 528 
+bucket[3]: 30 132 133 434 734 136 837 37 238 139 239 
+bucket[4]: 841 541 641 142 842 843 445 345 246 347 447 148 848 148 949 
+bucket[5]: 551 953 253 554 655 856 56 57 159 
+bucket[6]: 260 862 663 666 966 967 269 
+bucket[7]: 571 71 371 172 573 574 675 
+bucket[8]: 780 80 180 683 983 284 986 388 
+bucket[9]: 890 791 692 192 995 495 795 795 696 596 998 399 699 
+
+bucket[0]: 5 30 37 56 57 71 80 
+bucket[1]: 105 117 132 133 136 139 142 148 148 159 172 180 192 
+bucket[2]: 205 206 217 224 238 239 246 253 260 269 284 
+bucket[3]: 319 319 345 347 371 388 399 
+bucket[4]: 400 415 434 445 447 495 
+bucket[5]: 501 514 516 518 528 541 551 554 571 573 574 596 
+bucket[6]: 605 606 611 617 624 641 655 663 666 675 683 692 696 699 
+bucket[7]: 701 717 719 734 780 791 795 795 
+bucket[8]: 801 804 837 841 842 843 848 856 862 890 
+bucket[9]: 900 904 914 922 949 953 966 967 983 986 995 998 
+==7584== 
+==7584== HEAP SUMMARY:
+==7584==     in use at exit: 0 bytes in 0 blocks
+==7584==   total heap usage: 100 allocs, 100 frees, 1,600 bytes allocated
+==7584== 
+==7584== All heap blocks were freed -- no leaks are possible
+==7584== 
+==7584== For counts of detected and suppressed errors, rerun with: -v
+==7584== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+bash-4.2$ exit
+
+Script done on Sun 03 May 2020 04:39:11 PM EDT
